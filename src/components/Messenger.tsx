@@ -20,7 +20,7 @@ const Messenger = () => {
         if (room && room['room.id']) {
             const roomId = room['room.id'] as string;
             setId(room['room.id'] as string);
-            const socket = io('process.env.NEXT_PUBLIC_API_URL');
+            const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`);
             socket.emit('joinRoom', room['room.id']);
             socket.on('message', (message: { text: string, userId: string }) => {
                 console.log(message);
