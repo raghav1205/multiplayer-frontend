@@ -34,7 +34,7 @@ const TicTacToe: React.FC = () => {
         if (roomId && socket) {
             setId(roomId as string);
             // console.log(`Attempting to join room: ${roomId}`);
-            // socket.emit('joinRoom', { room: roomId, userId });
+            socket.emit('joinRoom', { room: roomId, userId });
 
             socket.on('connect', () => {
                 // console.log('Connected to server');
@@ -57,7 +57,7 @@ const TicTacToe: React.FC = () => {
             //     setPlayer(player);
             // });
             socket.on('roleAssigned', ({role, userId: currentRoleId}) => {
-                // console.log(`You are Player ${role + ' ' + currentRoleId }`);
+                console.log(`You are Player ${role + ' ' + currentRoleId }`);
                 if (currentRoleId === userId) {
                     setPlayer(role); 
                     setCurrentPlayer(role === 1 ? 'X' : 'O');
@@ -71,7 +71,7 @@ const TicTacToe: React.FC = () => {
                 socket.off('player');
             };
         }
-    }, [router]);
+    }, [router,socket]);
 
 
     useEffect(() => {
