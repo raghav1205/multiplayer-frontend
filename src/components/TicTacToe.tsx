@@ -30,7 +30,7 @@ const TicTacToe: React.FC = () => {
 
     const room = router.query;
     useEffect(() => {
-        const roomId = router.query['room.id']; 
+        const roomId = router.query['room.id'];
         if (roomId && socket) {
             setId(roomId as string);
             // console.log(`Attempting to join room: ${roomId}`);
@@ -56,10 +56,10 @@ const TicTacToe: React.FC = () => {
             //     setCurrentPlayer(player);
             //     setPlayer(player);
             // });
-            socket.on('roleAssigned', ({role, userId: currentRoleId}) => {
-                console.log(`You are Player ${role + ' ' + currentRoleId }`);
+            socket.on('roleAssigned', ({ role, userId: currentRoleId }) => {
+                console.log(`You are Player ${role + ' ' + currentRoleId}`);
                 if (currentRoleId === userId) {
-                    setPlayer(role); 
+                    setPlayer(role);
                     setCurrentPlayer(role === 1 ? 'X' : 'O');
                 }
             });
@@ -71,7 +71,7 @@ const TicTacToe: React.FC = () => {
                 socket.off('player');
             };
         }
-    }, [router,socket]);
+    }, [router, socket]);
 
 
     useEffect(() => {
@@ -106,14 +106,27 @@ const TicTacToe: React.FC = () => {
 
     return (
         <div className='flex flex-col h-full justify-center items-center'>
-            <div className='mb-2 text-center '>
-                <p>Current Move : {currentPlayer}</p>
+            <div className='mb-6 text-center '>
+                <p className='text-lg'>Current Move : {currentPlayer}</p>
                 <p>You are: {player}</p>
             </div>
-            <div className='w-[500px] mx-auto  grid grid-cols-3 gap-2'>
+            <div className='w-[500px] mx-auto  grid grid-cols-3 '>
                 {board.map((cell, index) => (
-                    <button key={index} onClick={() => handleClick(index)} className='border-2 border-red-600 p-4 min-h-[5rem]'>
-                        <span className='font-[2rem]'>{cell}</span>
+                    <button
+                        key={index}
+                        onClick={() => handleClick(index)}
+                        className={`
+                        ${index < 2 ? 'border-b-1 border-r-2' : ''} 
+                        ${index === 2 ? 'border-b-1' : ''} 
+                        ${[3, 4].includes(index) ? 'border-b-2 border-r-2 border-t-2' : ''} 
+                        ${index === 5 ? 'border-b-2 border-t-2' : ''} 
+                        ${[6, 7].includes(index) ? 'border-r-2 border-t-1' : ''} 
+                        ${index === 8 ? 'border-t-1' : ''} 
+                        border-slate-600 h-[100px]
+                    `}
+                    >                        <span className={`${cell === 'X' ? 'text-red-500' : 'text-blue-500'} text-5xl`}>
+                            {cell}
+                        </span>
                     </button>
                 ))}
             </div>
