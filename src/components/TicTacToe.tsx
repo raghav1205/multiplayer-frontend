@@ -30,18 +30,18 @@ const TicTacToe: React.FC = () => {
 
     const room = router.query;
     useEffect(() => {
-        const roomId = router.query['room.id']; // Adjust based on the actual query parameter name
+        const roomId = router.query['room.id']; 
         if (roomId && socket) {
             setId(roomId as string);
-            console.log(`Attempting to join room: ${roomId}`);
-            socket.emit('joinRoom', {room: roomId, userId});
+            // console.log(`Attempting to join room: ${roomId}`);
+            // socket.emit('joinRoom', { room: roomId, userId });
 
             socket.on('connect', () => {
-                console.log('Connected to server');
+                // console.log('Connected to server');
             });
 
             socket.on('disconnect', () => {
-                console.log('Disconnected from server');
+                // console.log('Disconnected from server');
             });
             socket.emit('move', { roomId, board, player: currentPlayer });
             socket.on('move', (data: { roomId: string, board: string[], player: string }) => {
@@ -56,11 +56,12 @@ const TicTacToe: React.FC = () => {
             //     setCurrentPlayer(player);
             //     setPlayer(player);
             // });
-            socket.on('roleAssigned', (role) => {
-                console.log(`You are Player ${role}`);
-                // Update the UI or state as needed to display this information
-                setPlayer(role); // Assuming you have a state to track the player's role
-                setCurrentPlayer(role === 1 ? 'X' : 'O');
+            socket.on('roleAssigned', ({role, userId: currentRoleId}) => {
+                // console.log(`You are Player ${role + ' ' + currentRoleId }`);
+                if (currentRoleId === userId) {
+                    setPlayer(role); 
+                    setCurrentPlayer(role === 1 ? 'X' : 'O');
+                }
             });
 
             return () => {
@@ -70,7 +71,7 @@ const TicTacToe: React.FC = () => {
                 socket.off('player');
             };
         }
-    }, [router, socket]); // Add `socket` to the dependency array if it's not a constant
+    }, [router]);
 
 
     useEffect(() => {
