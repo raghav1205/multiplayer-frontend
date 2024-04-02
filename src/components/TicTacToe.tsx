@@ -51,11 +51,11 @@ const TicTacToe: React.FC = () => {
             socket.on('move', (data: { roomId: string, board: string[], player: string }) => {
                 console.log('Move event received', data);
                 
-                if(modalOpen){
+                // if(modalOpen){
                     console.log('Other player wants to play again')
                     setWinner('');
                     close();
-                }
+                // }
                 setBoard(data.board);
                 setCurrentPlayer(data.player);
                 
